@@ -53,8 +53,8 @@ class traktAPI(object):
 	def __init__(self):
 		Debug("[traktAPI] Initializing.")
 
-		self.__username = getSetting('username')
-		self.__password = sha1(getSetting('password')).hexdigest()
+		self.__username = getSetting('username').strip()
+		self.__password = sha1(getSetting('password').strip()).hexdigest()
 
 		self.settings = None
 		if self.testAccount():
