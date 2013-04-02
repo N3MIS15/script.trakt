@@ -46,4 +46,8 @@
 		<setting id="rate_each_playlist_item" type="bool" label="1033" default="true"/>
 		<setting id="rate_min_view_time" type="slider" label="1034" range="0,5,100" default="75"/>
 	</category>
+	<category label="Program"><!-- Program -->
+		<setting label="Home Item 1" type="enum" id="gui_home_1" values="Friends Activity|Community Activity"/>
+		<setting label="Home Item 2" type="enum" id="gui_home_2" values="Trending Shows|Trending Movies"/>
+	</category>
 </settings>

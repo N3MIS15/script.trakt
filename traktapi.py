@@ -466,3 +466,17 @@ class traktAPI(object):
 		return self.rate('episode', data)
 	def rateMovie(self, data):
 		return self.rate('movie', data)
+
+	# url: http://api.trakt.tv/<shows|movies>/trending.format/apikey
+	def getTrending(self, media_type):
+		if self.testAccount():
+			url = "%s/%s/trending.json/%s" % (self.__baseURL, media_type, self.__apikey)
+			Debug("[traktAPI] getTrending(url: %s)" % (url))
+			return self.traktRequest('POST', url, passVersions=True)
+
+	# url: http://api.trakt.tv/activity/<friends|community>.format/apikey/types/actions
+	def getActivity(self, who, types, actions):
+		if self.testAccount():
+			url = "%s/activity/%s.json/%s/%s/%s" % (self.__baseURL, who, self.__apikey, types, actions)
+			Debug("[traktAPI] getActivity(url: %s)" % (url))
+			return self.traktRequest('POST', url, passVersions=True)

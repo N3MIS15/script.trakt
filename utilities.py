@@ -31,6 +31,9 @@ def getSetting(setting):
 def getSettingAsBool(setting):
         return getSetting(setting).lower() == "true"
 
+def getBoolSetting(setting):
+        return int(getSetting(setting))
+
 def getSettingAsFloat(setting):
     try:
         return float(getSetting(setting))

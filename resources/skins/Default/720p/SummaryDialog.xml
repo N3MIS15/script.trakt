@@ -1,0 +1,183 @@
+<window>
+	<controls>
+		<control type="group">
+			<control type="image">
+				<description>background</description>
+				<posx>0</posx>
+				<posy>0</posy>
+				<width>1280</width>
+				<height>720</height>
+				<texture>background.jpg</texture>
+			</control>
+			<control type="image" id="12000">
+				<description>fanart</description>
+				<posx>0</posx>
+				<posy>0</posy>
+				<width>1280</width>
+				<height>720</height>
+				<texture>-</texture>
+			</control>
+			<control type="image">
+				<description>black overlay</description>
+				<posx>0</posx>
+				<posy>0</posy>
+				<width>1280</width>
+				<height>720</height>
+				<texture>black_alpha.png</texture>
+			</control>
+			<control type="image">
+				<description>trakt logo</description>
+				<posx>15</posx>
+				<posy>5</posy>
+				<width>100</width>
+				<height>40</height>
+				<texture>logo.png</texture>
+			</control>
+			<control type="label" id="12001">
+				<description>title</description>
+				<posx>135</posx>
+				<posy>5</posy>
+				<height>40</height>
+				<width>500</width>
+				<aligny>center</aligny>
+				<font>font14</font>
+				<label>-</label>
+			</control>
+			<control type="image" id="12002">
+				<description>poster</description>
+				<posx>30</posx>
+				<posy>70</posy>
+				<width>202</width>
+				<height>285</height>
+				<aspectratio>stretch</aspectratio>
+				<texture>poster-small.jpg</texture>
+			</control>
+			<control type="image" id="12003">
+				<description>poster rating badge</description>
+				<posx>202</posx>
+				<posy>70</posy>
+				<width>30</width>
+				<height>30</height>
+				<aspectratio>stretch</aspectratio>
+				<texture>-</texture>
+			</control>
+			<control type="image" id="12004">
+				<description>poster watchlist badge</description>
+				<posx>35</posx>
+				<posy>70</posy>
+				<width>36</width>
+				<height>58</height>
+				<aspectratio>stretch</aspectratio>
+				<texture>-</texture>
+			</control>
+		</control>
+		<control type="textbox" id="12007">
+			<description>overview</description>
+			<posx>30</posx>
+			<posy>420</posy>
+			<width>482</width>
+			<height>250</height>
+			<font>font10</font>
+			<align>justify</align>
+			<autoscroll time="3000" delay="4000" repeat="5000">true</autoscroll>
+			<label>-</label>
+		</control>
+		<control type="group">
+			<posx>240</posx>
+			<posy>70</posy>
+			<width>250</width>
+			<height>285</height>
+			<control type="label" id="12008">
+				<description>rating percentage</description>
+				<posx>65</posx>
+				<posy>0</posy>
+				<height>30</height>
+				<width>80</width>
+				<align>right</align>
+				<aligny>center</aligny>
+				<font>font24_title</font>
+				<label>-</label>
+			</control>
+			<control type="image">
+				<description>love heart</description>
+				<posx>70</posx>
+				<posy>0</posy>
+				<width>30</width>
+				<height>30</height>
+				<aspectratio>stretch</aspectratio>
+				<texture>heart.png</texture>
+			</control>
+			<control type="label" id="12009">
+				<description>rating votes</description>
+				<posx>105</posx>
+				<posy>0</posy>
+				<height>30</height>
+				<width>200</width>
+				<aligny>center</aligny>
+				<align>left</align>
+				<font>font10</font>
+				<textcolor>FFC2C2C2</textcolor>
+				<label>-</label>
+			</control>
+			<control type="list" id="12010">
+				<posx>0</posx>
+				<posy>45</posy>
+				<width>250</width>
+				<height>150</height>
+				<scrolltime>200</scrolltime>
+				<itemlayout height="20">
+					<control type="label">
+						<posx>80</posx>
+						<posy>0</posy>
+						<width>80</width>
+						<height>20</height>
+						<font>font10</font>
+						<align>right</align>
+						<aligny>center</aligny>
+						<textcolor>blue</textcolor>
+						<selectedcolor>selected</selectedcolor>
+						<info>ListItem.Label</info>
+					</control>
+					<control type="label">
+						<posx>90</posx>
+						<posy>0</posy>
+						<width>160</width>
+						<height>20</height>
+						<font>font10</font>
+						<align>left</align>
+						<aligny>center</aligny>
+						<textcolor>white</textcolor>
+						<selectedcolor>white</selectedcolor>
+						<info>ListItem.Label2</info>
+					</control>
+				</itemlayout>
+				<focusedlayout height="20">
+					<control type="label">
+						<posx>80</posx>
+						<posy>0</posy>
+						<width>80</width>
+						<height>20</height>
+						<font>font10</font>
+						<align>right</align>
+						<aligny>center</aligny>
+						<textcolor>blue</textcolor>
+						<selectedcolor>selected</selectedcolor>
+						<info>ListItem.Label</info>
+					</control>
+					<control type="label">
+						<posx>90</posx>
+						<posy>0</posy>
+						<width>160</width>
+						<height>20</height>
+						<font>font10</font>
+						<align>left</align>
+						<aligny>center</aligny>
+						<textcolor>white</textcolor>
+						<selectedcolor>white</selectedcolor>
+						<info>ListItem.Label2</info>
+					</control>
+				</focusedlayout>
+			</control>
+		</control>
+	</controls>
+</window>
