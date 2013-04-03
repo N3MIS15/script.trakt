@@ -47,7 +47,18 @@
 		<setting id="rate_min_view_time" type="slider" label="1034" range="0,5,100" default="75"/>
 	</category>
 	<category label="Program"><!-- Program -->
-		<setting label="Home Item 1" type="enum" id="gui_home_1" values="Friends Activity|Community Activity"/>
-		<setting label="Home Item 2" type="enum" id="gui_home_2" values="Trending Shows|Trending Movies"/>
+		<setting label="Home" type="lsep"/>
+		<setting label="Activity Item" type="enum" id="gui_home_activity" values="Friends|Community"/>
+		<setting label="Media Item" type="enum" id="gui_home_media" values="Trending Shows|Trending Movies"/>
+		<setting label="Media Goes To" type="enum" id="gui_home_media_goto" values="Summary|List"/>
+		<setting type="sep"/>
+		<setting label="Calendar" type="lsep"/>
+		<setting label="Default View" type="enum" id="gui_calendar_default" values="My Shows|My Premieres|All Premieres|All"/>
+		<setting type="sep"/>
+		<setting label="TV Shows" type="lsep"/>
+		<setting label="Default View" type="enum" id="gui_shows_default" values="Trending|Popular|Watched|Played"/>
+		<setting type="sep"/>
+		<setting label="Movies" type="lsep"/>
+		<setting label="Default View" type="enum" id="gui_movies_default" values="Trending|Popular|Watched|Played"/>
 	</category>
 </settings>

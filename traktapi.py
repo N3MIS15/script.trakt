@@ -206,6 +206,8 @@ class traktAPI(object):
 			if 'status' in data:
 				if data['status'] == 'success':
 					break
+				elif data['status'] in ['Continuing', 'Ended']: # Summary status
+					break
 				elif returnOnFailure and data['status'] == 'failure':
 					Debug("[traktAPI] traktRequest(): Return on error set, breaking retry.")
 					break

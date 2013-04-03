@@ -173,11 +173,11 @@
 					</focusedlayout>
 				</control>
 			</control>
-			<control type="group"> <!--TRENDING-->
+			<control type="group"> <!--MEDIA LIST-->
 				<posx>0</posx>
 				<posy>340</posy>
 				<control type="image">
-					<description>treding header bg</description>
+					<description>media header bg</description>
 					<posx>0</posx>
 					<posy>0</posy>
 					<height>40</height>
@@ -185,7 +185,7 @@
 					<texture>black_alpha.png</texture>
 				</control>
 				<control type="label" id="11200">
-					<description>trending header text</description>
+					<description>media header text</description>
 					<posx>0</posx>
 					<posy>0</posy>
 					<height>40</height>
@@ -200,6 +200,7 @@
 					<posy>70</posy>
 					<width>1020</width>
 					<height>300</height>
+					<preloaditems>true</preloaditems>
 					<orientation>horizontal</orientation>
 					<onup>11101</onup>
 					<onleft>10005</onleft>
@@ -273,18 +274,6 @@
 		</control>
 
 		<control type="group" id="13000"> <!--CALENDAR PAGE-->
-			<control type="button" id="11111">
-				<description>button</description>
-				<posx>490</posx>
-				<posy>340</posy>
-				<height>40</height>
-				<width>200</width>
-				<align>center</align>
-				<aligny>center</aligny>
-				<font>font14</font>
-				<label>CALENDAR</label>
-				<texture>black_alpha.png</texture>
-			</control>
 		</control>
 
 		<control type="group" id="14000"> <!--TVSHOWS PAGE-->
@@ -299,7 +288,7 @@
 					<colordiffuse>FFCCCCCC</colordiffuse>
 					<texture border="0,0,0,3" flipx="true">HomeSubEnd.png</texture>
 				</control>
-				<control type="button">
+				<control type="button" id="14001">
 					<posx>35</posx>
 					<posy>0</posy>
 					<width>120</width>
@@ -310,7 +299,7 @@
 					<texturenofocus>HomeSubNF.png</texturenofocus>
 					<label>Trending</label>
 				</control>
-				<control type="button">
+				<control type="button" id="14002">
 					<posx>155</posx>
 					<posy>0</posy>
 					<width>120</width>
@@ -321,7 +310,7 @@
 					<texturenofocus>HomeSubNF.png</texturenofocus>
 					<label>Popular</label>
 				</control>
-				<control type="button">
+				<control type="button" id="14003">
 					<posx>275</posx>
 					<posy>0</posy>
 					<width>120</width>
@@ -332,7 +321,7 @@
 					<texturenofocus>HomeSubNF.png</texturenofocus>
 					<label>Watched</label>
 				</control>
-				<control type="button">
+				<control type="button" id="14004">
 					<posx>395</posx>
 					<posy>0</posy>
 					<width>120</width>
@@ -343,25 +332,102 @@
 					<texturenofocus>HomeSubNF.png</texturenofocus>
 					<label>Played</label>
 				</control>
-				<!--<control type="image">
-					<posx>515</posx>
-					<posy>0</posy>
-					<width>35</width>
-					<height>35</height>
-					<texture border="0,0,0,3">HomeSubEnd.png</texture>
-				</control>-->
 			</control>
-			<control type="button" id="11111">
-				<description>button</description>
-				<posx>490</posx>
-				<posy>340</posy>
+			<control type="image">
+				<posx>0</posx>
+				<posy>60</posy>
+				<description>media header bg</description>
+				<posx>0</posx>
+				<posy>0</posy>
 				<height>40</height>
-				<width>200</width>
+				<width>1280</width>
+				<texture>black_alpha.png</texture>
+			</control>
+			<control type="label" id="14100">
+				<description>media header text</description>
+				<posx>0</posx>
+				<posy>60</posy>
+				<height>40</height>
+				<width>1280</width>
 				<align>center</align>
 				<aligny>center</aligny>
-				<font>font14</font>
-				<label>TVSHOWS</label>
-				<texture>black_alpha.png</texture>
+				<font>font12</font>
+				<label>-</label>
+			</control>
+			<control type="panel" id="14101">
+				<posx>130</posx>
+				<posy>120</posy>
+				<width>1020</width>
+				<height>600</height>
+				<onup>-</onup>
+				<onleft>10005</onleft>
+				<preloaditems>true</preloaditems>
+				<orientation>vertical</orientation>
+				<itemlayout height="300" width="170">
+					<control type="image">
+						<description>poster</description>
+						<posx>16</posx>
+						<posy>0</posy>
+						<height>203</height>
+						<width>138</width>
+						<info>ListItem.Thumb</info>
+					</control>
+					<control type="label">
+						<description>title</description>
+						<posx>85</posx>
+						<posy>210</posy>
+						<align>center</align>
+						<width>150</width>
+						<height>20</height>
+						<font>font12</font>
+						<info>ListItem.Label</info>
+					</control>
+					<control type="label">
+						<description>watchers</description>
+						<posx>85</posx>
+						<posy>232</posy>
+						<height>20</height>
+						<width>150</width>
+						<align>center</align>
+						<aligny>top</aligny>
+						<font>font10</font>
+						<textcolor>FFBBBBBB</textcolor>
+						<info>ListItem.Label2</info>
+					</control>
+				</itemlayout>
+				<focusedlayout height="300" width="170">
+					<control type="image">
+						<description>poster</description>
+						<posx>16</posx>
+						<posy>0</posy>
+						<height>203</height>
+						<width>138</width>
+						<animation effect="zoom" end="0,0,152,223" time="100" center="auto">focus</animation>
+						<info>ListItem.Thumb</info>
+					</control>
+					<control type="label">
+						<description>title</description>
+						<posx>85</posx>
+						<posy>210</posy>
+						<align>center</align>
+						<width>150</width>
+						<height>20</height>
+						<font>font12</font>
+						<info>ListItem.Label</info>
+					</control>
+					<control type="label">
+						<description>watchers</description>
+						<posx>85</posx>
+						<posy>232</posy>
+						<height>20</height>
+						<width>150</width>
+						<align>center</align>
+						<aligny>top</aligny>
+						<font>font10</font>
+						<textcolor>FFBBBBBB</textcolor>
+						<info>ListItem.Label2</info>
+					</control>
+				</focusedlayout>
 			</control>
 		</control>
 
@@ -551,6 +617,5 @@
 				</control>
 			</control>
 		</control>
-
 	</controls>
 </window>
