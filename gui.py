@@ -169,11 +169,13 @@ class traktGUI(xbmcgui.WindowXML):
 	def showLoading(self):
 		# Remove the current page and show loading...
 		self.getControl(self.current_page).setVisible(False)
+		self.getControl(10001).setVisible(False) # Hide title while loading
 		self.getControl(15000).setVisible(True)
 
 	def hideLoading(self, dialog=False):
 		# Hide loading...
 		self.getControl(15000).setVisible(False)
+		self.getControl(10001).setVisible(True)
 		if dialog:
 			self.getControl(self.current_page).setVisible(True) # Show the previous page again
 
