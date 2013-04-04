@@ -276,7 +276,7 @@
 		<control type="group" id="13000"> <!--CALENDAR PAGE-->
 		</control>
 
-		<control type="group" id="14000"> <!--TVSHOWS PAGE-->
+		<control type="group" id="14000"> <!--MEDIA LIST PAGE-->
 			<control type="group">
 				<posx>515r</posx>
 				<posy>0</posy>
@@ -431,18 +431,17 @@
 			</control>
 		</control>
 
-		<control type="group" id="15000"> <!--MOVIES PAGE-->
-			<control type="button" id="11111">
-				<description>button</description>
-				<posx>490</posx>
-				<posy>340</posy>
-				<height>40</height>
-				<width>200</width>
+		<control type="group" id="15000"> <!--LOADING PAGE-->
+			<control type="label">
+				<description>loading text</description>
+				<posx>0</posx>
+				<posy>0</posy>
+				<height>720</height>
+				<width>1280</width>
 				<align>center</align>
 				<aligny>center</aligny>
-				<font>font14</font>
-				<label>MOVIES</label>
-				<texture>black_alpha.png</texture>
+				<font>font28_title</font>
+				<label>Loading...</label>
 			</control>
 		</control>
 

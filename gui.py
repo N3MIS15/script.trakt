@@ -23,13 +23,12 @@ def small_poster(image):
 
 class traktGUI(xbmcgui.WindowXML):
 	def onInit(self):
-		self.current_page = None
+		self.current_page = 15000 # Loading
 		self.rating_type = api.settings['viewing']['ratings']['mode']
 		# Hide all pages by default
 		self.getControl(11000).setVisible(False)
 		self.getControl(13000).setVisible(False)
 		self.getControl(14000).setVisible(False)
-		self.getControl(15000).setVisible(False)
 		self.renderPage("home", "Home")
 
 	def getMediaID(self, media):
@@ -102,7 +101,7 @@ class traktGUI(xbmcgui.WindowXML):
 		return [title, list_activities]
 
 	def renderSummary(self, media_type, media_id):
-		### NEED TO ADD LOADING DIALOG ###
+		self.showLoading()
 		summary = api.getSummary(media_type, media_id)
 		gui = SummaryDialog(
 			"SummaryDialog.xml",
@@ -110,6 +109,7 @@ class traktGUI(xbmcgui.WindowXML):
 			media_type=media_type,
 			media=summary,
 		)
+		self.hideLoading(dialog=True)
 		gui.doModal()
 		del gui
 
@@ -143,6 +143,8 @@ class traktGUI(xbmcgui.WindowXML):
 			self.renderSummary(media_type, media_id)
 
 	def renderPage(self, page, title=""):
+		self.showLoading()
+
 		# Grab the data for the page
 		if page == "home":
 			page_id = 11000
@@ -157,15 +159,23 @@ class traktGUI(xbmcgui.WindowXML):
 			page_id = 14000
 			self.renderMediaPage("movies")
 
-		# Change page title
-		self.getControl(10001).setLabel(title)
+		self.hideLoading()
 
-		# Remove and replace current page
-		if self.current_page:
-			self.getControl(self.current_page).setVisible(False)
-
+		# Show new page
+		self.getControl(10001).setLabel(title) # Change page title
 		self.current_page = page_id
 		self.getControl(page_id).setVisible(True)
+
+	def showLoading(self):
+		# Remove the current page and show loading...
+		self.getControl(self.current_page).setVisible(False)
+		self.getControl(15000).setVisible(True)
+
+	def hideLoading(self, dialog=False):
+		# Hide loading...
+		self.getControl(15000).setVisible(False)
+		if dialog:
+			self.getControl(self.current_page).setVisible(True) # Show the previous page again
 
 	def renderHomePage(self):
 		# Populate users profile avatar and username
