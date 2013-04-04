@@ -122,9 +122,9 @@ class traktGUI(xbmcgui.WindowXML):
 		if controlID == 10006:
 			self.renderPage("calendar", "Calendar")
 		if controlID == 10007:
-			self.renderPage("shows", "TV Shows [COLOR=blue]-[/COLOR] " + media_page_settings[utils.getBoolSetting("gui_shows_default")])
+			self.renderPage("shows", "TV Shows [COLOR=blue]-[/COLOR] " + media_page_settings[utils.getSettingAsInt("gui_shows_default")])
 		if controlID == 10008:
-			self.renderPage("movies", "Movies [COLOR=blue]-[/COLOR] " + media_page_settings[utils.getBoolSetting("gui_shows_default")])
+			self.renderPage("movies", "Movies [COLOR=blue]-[/COLOR] " + media_page_settings[utils.getSettingAsInt("gui_shows_default")])
 		if controlID == 10021:
 			utils.setProperty('traktManualSync', 'True')
 		if controlID == 10022:
@@ -185,16 +185,16 @@ class traktGUI(xbmcgui.WindowXML):
 		self.getControl(11002).setLabel(api.settings['profile']['username'])
 
 		# Check settings for home layout
-		if utils.getBoolSetting("gui_home_activity") == 0:
+		if utils.getSettingAsInt("gui_home_activity") == 0:
 			activity_data = self.getActivityData("friends")
 
-		elif utils.getBoolSetting("gui_home_activity") == 1:
+		elif utils.getSettingAsInt("gui_home_activity") == 1:
 			activity_data = self.getActivityData("community")
 
-		if utils.getBoolSetting("gui_home_media") == 0:
+		if utils.getSettingAsInt("gui_home_media") == 0:
 			media_data = self.getMediaData("trending", "shows")
 
-		elif utils.getBoolSetting("gui_home_media") == 1:
+		elif utils.getSettingAsInt("gui_home_media") == 1:
 			media_data = self.getMediaData("trending", "movies")
 
 		self.getControl(11100).setLabel(activity_data[0]) # Activity title
@@ -204,14 +204,14 @@ class traktGUI(xbmcgui.WindowXML):
 
 	def renderMediaPage(self, media_type):
 		# Check settings for default
-		if utils.getBoolSetting("gui_%s_default" % media_type) == 0:
+		if utils.getSettingAsInt("gui_%s_default" % media_type) == 0:
 			# Get Trending
 			media_data = self.getMediaData("trending", media_type)
-		elif utils.getBoolSetting("gui_%s_default" % media_type) == 1:
+		elif utils.getSettingAsInt("gui_%s_default" % media_type) == 1:
 			# Get Popular
 			#media_data = self.getMediaData("popular", media_type)
 			pass
-		elif utils.getBoolSetting("gui_%s_default" % media_type) == 2:
+		elif utils.getSettingAsInt("gui_%s_default" % media_type) == 2:
 			# Get Watched
 			#media_data = self.getMediaData("watched", media_type)
 			pass
