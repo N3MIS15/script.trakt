@@ -15,6 +15,7 @@ __addon__        = xbmcaddon.Addon(id='script.trakt')
 __addonpath__    = __addon__.getAddonInfo('path')
 
 media_page_settings = ["Trending", "Popular", "Watched", "Played"]
+
 def small_poster(image):
 	if not 'poster-small' in image:
 		x = image.rfind('.')
@@ -102,6 +103,8 @@ class traktGUI(xbmcgui.WindowXML):
 
 	def renderSummary(self, media_type, media_id):
 		self.showLoading()
+		if media_type.endswith("s"):
+			media_type = media_type[:-1]
 		summary = api.getSummary(media_type, media_id)
 		gui = SummaryDialog(
 			"SummaryDialog.xml",
@@ -122,7 +125,7 @@ class traktGUI(xbmcgui.WindowXML):
 		if controlID == 10006:
 			self.renderPage("calendar", "Calendar")
 		if controlID == 10007:
-			self.renderPage("shows", "TV Shows [COLOR=blue]-[/COLOR] " + media_page_settings[utils.getSettingAsInt("gui_shows_default")])
+			self.renderPage("shows", "Shows [COLOR=blue]-[/COLOR] " + media_page_settings[utils.getSettingAsInt("gui_shows_default")])
 		if controlID == 10008:
 			self.renderPage("movies", "Movies [COLOR=blue]-[/COLOR] " + media_page_settings[utils.getSettingAsInt("gui_shows_default")])
 		if controlID == 10021:
@@ -132,15 +135,15 @@ class traktGUI(xbmcgui.WindowXML):
 
 		# Media lists
 		if controlID in [11201, 14101]:
-			# Goto clicked item's summary
 			li = self.getControl(controlID).getSelectedItem()
 			media_type = li.getProperty("media_type")
 			media_id = li.getProperty("media_id")
 
-			if media_type.endswith("s"):
-				media_type = media_type[:-1]
-
-			self.renderSummary(media_type, media_id)
+			if self.current_page == 11000 and utils.getSettingAsInt("gui_home_media_goto") == 1:
+				title = "%s [COLOR=blue]-[/COLOR] %s" % (media_type.title(), media_page_settings[utils.getSettingAsInt("gui_home_media")])
+				self.renderPage(media_type, title)
+			else:
+				self.renderSummary(media_type, media_id)
 
 	def renderPage(self, page, title=""):
 		self.showLoading()
