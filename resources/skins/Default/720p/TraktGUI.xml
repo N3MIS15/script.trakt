@@ -66,7 +66,7 @@
 					<posy>0</posy>
 					<height>40</height>
 					<width>1280</width>
-					<texture>black_alpha.png</texture>
+					<texture>black_alpha_80.png</texture>
 				</control>
 				<control type="label" id="11100">
 					<description>network header text</description>
@@ -95,7 +95,7 @@
 							<posy>15</posy>
 							<height>70</height>
 							<width>580</width>
-							<texture>black_alpha.png</texture>
+							<texture>black_alpha_80.png</texture>
 						</control>
 						<control type="image">
 							<description>network avatar</description>
@@ -137,7 +137,7 @@
 							<height>70</height>
 							<width>580</width>
 							<animation effect="zoom" end="0,0,600,90" time="100" center="auto">focus</animation>
-							<texture>black_alpha.png</texture>
+							<texture>black_alpha_80.png</texture>
 						</control>
 						<control type="image">
 							<description>network avatar</description>
@@ -182,7 +182,7 @@
 					<posy>0</posy>
 					<height>40</height>
 					<width>1280</width>
-					<texture>black_alpha.png</texture>
+					<texture>black_alpha_80.png</texture>
 				</control>
 				<control type="label" id="11200">
 					<description>media header text</description>
@@ -195,23 +195,74 @@
 					<font>font12</font>
 					<label>-</label>
 				</control>
+				<control type="image">
+					<description>left arrow</description>
+					<posx>45</posx>
+					<posy>150</posy>
+					<height>64</height>
+					<width>32</width>
+					<visible>Container(11201).HasPrevious</visible>
+					<texture>left_arrow.png</texture>
+				</control>
+				<control type="image">
+					<description>left arrow</description>
+					<posx>77r</posx>
+					<posy>150</posy>
+					<height>64</height>
+					<width>32</width>
+					<visible>Container(11201).HasNext</visible>
+					<texture flipx="true">left_arrow.png</texture>
+				</control>
 				<control type="panel" id="11201">
+					<description>media panel</description>
 					<posx>130</posx>
 					<posy>70</posy>
 					<width>1020</width>
 					<height>300</height>
-					<preloaditems>true</preloaditems>
 					<orientation>horizontal</orientation>
 					<onup>11101</onup>
 					<onleft>10005</onleft>
 					<itemlayout height="300" width="170">
-						<control type="image">
-							<description>poster</description>
-							<posx>16</posx>
-							<posy>0</posy>
+						<control type="group">
 							<height>203</height>
 							<width>138</width>
-							<info>ListItem.Thumb</info>
+							<control type="image">
+								<description>poster</description>
+								<posx>16</posx>
+								<posy>0</posy>
+								<height>203</height>
+								<width>138</width>
+								<info>ListItem.Thumb</info>
+							</control>
+							<control type="image">
+								<description>poster rating badge</description>
+								<posx>130</posx>
+								<posy>0</posy>
+								<width>20</width>
+								<height>20</height>
+								<aspectratio>stretch</aspectratio>
+								<info>ListItem.Property(rating_image)</info>
+							</control>
+							<control type="image">
+								<description>poster watchlist badge</description>
+								<posx>25</posx>
+								<posy>0</posy>
+								<width>24</width>
+								<height>39</height>
+								<aspectratio>stretch</aspectratio>
+								<texture>badge-watchlist.png</texture>
+								<visible>SubString(ListItem.Property(in_watchlist),true)</visible>
+							</control>
+							<control type="image">
+								<description>seen</description>
+								<posx>110</posx>
+								<posy>0</posy>
+								<width>40</width>
+								<height>40</height>
+								<aspectratio>stretch</aspectratio>
+								<texture>seen.png</texture>
+								<visible>SubString(ListItem.Property(watched),true)</visible>
+							</control>
 						</control>
 						<control type="label">
 							<description>title</description>
@@ -224,7 +275,7 @@
 							<info>ListItem.Label</info>
 						</control>
 						<control type="label">
-							<description>watchers</description>
+							<description>label2</description>
 							<posx>85</posx>
 							<posy>232</posy>
 							<height>20</height>
@@ -237,14 +288,47 @@
 						</control>
 					</itemlayout>
 					<focusedlayout height="300" width="170">
-						<control type="image">
-							<description>poster</description>
-							<posx>16</posx>
-							<posy>0</posy>
+						<control type="group">
 							<height>203</height>
 							<width>138</width>
 							<animation effect="zoom" end="0,0,152,223" time="100" center="auto">focus</animation>
-							<info>ListItem.Thumb</info>
+							<control type="image">
+								<description>poster</description>
+								<posx>16</posx>
+								<posy>0</posy>
+								<height>203</height>
+								<width>138</width>
+								<info>ListItem.Thumb</info>
+							</control>
+							<control type="image">
+								<description>poster rating badge</description>
+								<posx>130</posx>
+								<posy>0</posy>
+								<width>20</width>
+								<height>20</height>
+								<aspectratio>stretch</aspectratio>
+								<info>ListItem.Property(rating_image)</info>
+							</control>
+							<control type="image">
+								<description>poster watchlist badge</description>
+								<posx>25</posx>
+								<posy>0</posy>
+								<width>24</width>
+								<height>39</height>
+								<aspectratio>stretch</aspectratio>
+								<texture>badge-watchlist.png</texture>
+								<visible>SubString(ListItem.Property(in_watchlist),true)</visible>
+							</control>
+							<control type="image">
+								<description>seen</description>
+								<posx>110</posx>
+								<posy>0</posy>
+								<width>40</width>
+								<height>40</height>
+								<aspectratio>stretch</aspectratio>
+								<texture>seen.png</texture>
+								<visible>SubString(ListItem.Property(watched),true)</visible>
+							</control>
 						</control>
 						<control type="label">
 							<description>title</description>
@@ -257,7 +341,7 @@
 							<info>ListItem.Label</info>
 						</control>
 						<control type="label">
-							<description>watchers</description>
+							<description>label2</description>
 							<posx>85</posx>
 							<posy>232</posy>
 							<height>20</height>
@@ -274,62 +358,141 @@
 		</control>
 
 		<control type="group" id="13000"> <!--CALENDAR PAGE-->
-		</control>
-
-		<control type="group" id="14000"> <!--MEDIA LIST PAGE-->
-			<control type="group">
-				<posx>515r</posx>
+			<control type="grouplist" id="14001">
+				<description>top menu</description>
+				<posx>765</posx>
 				<posy>0</posy>
+				<itemgap>0</itemgap>
+				<orientation>horizontal</orientation>
+				<onup>-</onup>
+				<ondown>14101</ondown>
+				<onleft>-</onleft>
+				<onright>-</onright>
 				<control type="image">
-					<posx>0</posx>
-					<posy>0</posy>
 					<width>35</width>
 					<height>35</height>
 					<colordiffuse>FFCCCCCC</colordiffuse>
 					<texture border="0,0,0,3" flipx="true">HomeSubEnd.png</texture>
 				</control>
-				<control type="button" id="14001">
-					<posx>35</posx>
-					<posy>0</posy>
-					<width>120</width>
-					<height>35</height>
-					<align>center</align>
-					<aligny>center</aligny>
-					<texturefocus>HomeSubFO.png</texturefocus>
-					<texturenofocus>HomeSubNF.png</texturenofocus>
-					<label>Trending</label>
-				</control>
 				<control type="button" id="14002">
-					<posx>155</posx>
-					<posy>0</posy>
 					<width>120</width>
 					<height>35</height>
 					<align>center</align>
 					<aligny>center</aligny>
 					<texturefocus>HomeSubFO.png</texturefocus>
 					<texturenofocus>HomeSubNF.png</texturenofocus>
-					<label>Popular</label>
+					<font>font10</font>
+					<label>My Shows</label>
 				</control>
 				<control type="button" id="14003">
-					<posx>275</posx>
-					<posy>0</posy>
 					<width>120</width>
 					<height>35</height>
 					<align>center</align>
 					<aligny>center</aligny>
 					<texturefocus>HomeSubFO.png</texturefocus>
 					<texturenofocus>HomeSubNF.png</texturenofocus>
-					<label>Watched</label>
+					<font>font10</font>
+					<label>My Premieres</label>
 				</control>
 				<control type="button" id="14004">
-					<posx>395</posx>
-					<posy>0</posy>
 					<width>120</width>
 					<height>35</height>
 					<align>center</align>
 					<aligny>center</aligny>
 					<texturefocus>HomeSubFO.png</texturefocus>
 					<texturenofocus>HomeSubNF.png</texturenofocus>
+					<font>font10</font>
+					<label>All Premieres</label>
+				</control>
+				<control type="button" id="14005">
+					<width>120</width>
+					<height>35</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<texturefocus>HomeSubFO.png</texturefocus>
+					<texturenofocus>HomeSubNF.png</texturenofocus>
+					<font>font10</font>
+					<label>All</label>
+				</control>
+			</control>
+			<control type="image">
+				<posx>0</posx>
+				<posy>60</posy>
+				<description>calendar header bg</description>
+				<posx>0</posx>
+				<posy>0</posy>
+				<height>40</height>
+				<width>1280</width>
+				<texture>black_alpha_80.png</texture>
+			</control>
+			<control type="label" id="14100">
+				<description>calendar header text</description>
+				<posx>0</posx>
+				<posy>60</posy>
+				<height>40</height>
+				<width>1280</width>
+				<align>center</align>
+				<aligny>center</aligny>
+				<font>font12</font>
+				<label>Calendar</label>
+			</control>
+		</control>
+
+		<control type="group" id="14000"> <!--MEDIA LIST PAGE-->
+			<control type="grouplist" id="14001">
+				<description>top menu</description>
+				<posx>765</posx>
+				<posy>0</posy>
+				<itemgap>0</itemgap>
+				<orientation>horizontal</orientation>
+				<onup>-</onup>
+				<ondown>14101</ondown>
+				<onleft>-</onleft>
+				<onright>-</onright>
+				<control type="image">
+					<width>35</width>
+					<height>35</height>
+					<colordiffuse>FFCCCCCC</colordiffuse>
+					<texture border="0,0,0,3" flipx="true">HomeSubEnd.png</texture>
+				</control>
+				<control type="button" id="14002">
+					<width>120</width>
+					<height>35</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<texturefocus>HomeSubFO.png</texturefocus>
+					<texturenofocus>HomeSubNF.png</texturenofocus>
+					<font>font10</font>
+					<label>Trending</label>
+				</control>
+				<control type="button" id="14003">
+					<width>120</width>
+					<height>35</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<texturefocus>HomeSubFO.png</texturefocus>
+					<texturenofocus>HomeSubNF.png</texturenofocus>
+					<font>font10</font>
+					<label>Popular</label>
+				</control>
+				<control type="button" id="14004">
+					<width>120</width>
+					<height>35</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<texturefocus>HomeSubFO.png</texturefocus>
+					<texturenofocus>HomeSubNF.png</texturenofocus>
+					<font>font10</font>
+					<label>Watched</label>
+				</control>
+				<control type="button" id="14005">
+					<width>120</width>
+					<height>35</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<texturefocus>HomeSubFO.png</texturefocus>
+					<texturenofocus>HomeSubNF.png</texturenofocus>
+					<font>font10</font>
 					<label>Played</label>
 				</control>
 			</control>
@@ -341,7 +504,7 @@
 				<posy>0</posy>
 				<height>40</height>
 				<width>1280</width>
-				<texture>black_alpha.png</texture>
+				<texture>black_alpha_80.png</texture>
 			</control>
 			<control type="label" id="14100">
 				<description>media header text</description>
@@ -354,6 +517,24 @@
 				<font>font12</font>
 				<label>-</label>
 			</control>
+			<control type="image">
+				<description>up arrow</description>
+				<posx>94r</posx>
+				<posy>150</posy>
+				<height>32</height>
+				<width>64</width>
+				<visible>Container(14101).HasPrevious</visible>
+				<texture>up_arrow.png</texture>
+			</control>
+			<control type="image">
+				<description>down arrow</description>
+				<posx>94r</posx>
+				<posy>628</posy>
+				<height>32</height>
+				<width>64</width>
+				<visible>Container(14101).HasNext</visible>
+				<texture flipy="true">up_arrow.png</texture>
+			</control>
 			<control type="panel" id="14101">
 				<posx>130</posx>
 				<posy>120</posy>
@@ -361,16 +542,49 @@
 				<height>600</height>
 				<onup>-</onup>
 				<onleft>10005</onleft>
-				<preloaditems>true</preloaditems>
+				<pagecontrol>14102</pagecontrol>
 				<orientation>vertical</orientation>
 				<itemlayout height="300" width="170">
-					<control type="image">
-						<description>poster</description>
-						<posx>16</posx>
-						<posy>0</posy>
+					<control type="group">
 						<height>203</height>
 						<width>138</width>
-						<info>ListItem.Thumb</info>
+						<control type="image">
+							<description>poster</description>
+							<posx>16</posx>
+							<posy>0</posy>
+							<height>203</height>
+							<width>138</width>
+							<info>ListItem.Thumb</info>
+						</control>
+						<control type="image">
+							<description>poster rating badge</description>
+							<posx>130</posx>
+							<posy>0</posy>
+							<width>20</width>
+							<height>20</height>
+							<aspectratio>stretch</aspectratio>
+							<info>ListItem.Property(rating_image)</info>
+						</control>
+						<control type="image">
+							<description>poster watchlist badge</description>
+							<posx>25</posx>
+							<posy>0</posy>
+							<width>24</width>
+							<height>39</height>
+							<aspectratio>stretch</aspectratio>
+							<texture>badge-watchlist.png</texture>
+							<visible>SubString(ListItem.Property(in_watchlist),true)</visible>
+						</control>
+						<control type="image">
+							<description>seen</description>
+							<posx>110</posx>
+							<posy>0</posy>
+							<width>40</width>
+							<height>40</height>
+							<aspectratio>stretch</aspectratio>
+							<texture>seen.png</texture>
+							<visible>SubString(ListItem.Property(watched),true)</visible>
+						</control>
 					</control>
 					<control type="label">
 						<description>title</description>
@@ -383,7 +597,7 @@
 						<info>ListItem.Label</info>
 					</control>
 					<control type="label">
-						<description>watchers</description>
+						<description>label2</description>
 						<posx>85</posx>
 						<posy>232</posy>
 						<height>20</height>
@@ -396,14 +610,47 @@
 					</control>
 				</itemlayout>
 				<focusedlayout height="300" width="170">
-					<control type="image">
-						<description>poster</description>
-						<posx>16</posx>
-						<posy>0</posy>
+					<control type="group">
 						<height>203</height>
 						<width>138</width>
 						<animation effect="zoom" end="0,0,152,223" time="100" center="auto">focus</animation>
-						<info>ListItem.Thumb</info>
+						<control type="image">
+							<description>poster</description>
+							<posx>16</posx>
+							<posy>0</posy>
+							<height>203</height>
+							<width>138</width>
+							<info>ListItem.Thumb</info>
+						</control>
+						<control type="image">
+							<description>poster rating badge</description>
+							<posx>130</posx>
+							<posy>0</posy>
+							<width>20</width>
+							<height>20</height>
+							<aspectratio>stretch</aspectratio>
+							<info>ListItem.Property(rating_image)</info>
+						</control>
+						<control type="image">
+							<description>poster watchlist badge</description>
+							<posx>25</posx>
+							<posy>0</posy>
+							<width>24</width>
+							<height>39</height>
+							<aspectratio>stretch</aspectratio>
+							<texture>badge-watchlist.png</texture>
+							<visible>SubString(ListItem.Property(in_watchlist),true)</visible>
+						</control>
+						<control type="image">
+							<description>seen</description>
+							<posx>110</posx>
+							<posy>0</posy>
+							<width>40</width>
+							<height>40</height>
+							<aspectratio>stretch</aspectratio>
+							<texture>seen.png</texture>
+							<visible>SubString(ListItem.Property(watched),true)</visible>
+						</control>
 					</control>
 					<control type="label">
 						<description>title</description>
@@ -416,7 +663,7 @@
 						<info>ListItem.Label</info>
 					</control>
 					<control type="label">
-						<description>watchers</description>
+						<description>label2</description>
 						<posx>85</posx>
 						<posy>232</posy>
 						<height>20</height>
@@ -488,15 +735,18 @@
 				<height>40</height>
 				<texture>logo.png</texture>
 			</control>
-			<control type="group" id="10004">
+			<control type="grouplist" id="10004">
 				<posx>0</posx>
 				<posy>110</posy>
 				<width>250</width>
 				<itemgap>0</itemgap>
+				<orientation>vertical</orientation>
+				<onup>-</onup>
+				<onleft>-</onleft>
+				<onright>-</onright>
+				<ondown>10020</ondown>
 				<control type="button" id="10005">
 					<description>Home</description>
-					<posx>0</posx>
-					<posy>0</posy>
 					<height>40</height>
 					<width>250</width>
 					<textoffsetx>10</textoffsetx>
@@ -505,17 +755,10 @@
 					<font>font13</font>
 					<texturefocus border="5">button-focus.png</texturefocus>
 					<texturenofocus>-</texturenofocus>
-					<pulseonselect>false</pulseonselect>
-					<onup>-</onup>
-					<ondown>10006</ondown>
-					<onleft>-</onleft>
-					<onright>11201</onright>
 					<label>Home</label>
 				</control>
 				<control type="button" id="10006">
 					<description>Calendar</description>
-					<posx>0</posx>
-					<posy>40</posy>
 					<height>40</height>
 					<width>250</width>
 					<textoffsetx>10</textoffsetx>
@@ -524,17 +767,10 @@
 					<font>font13</font>
 					<texturefocus border="5">button-focus.png</texturefocus>
 					<texturenofocus>-</texturenofocus>
-					<pulseonselect>false</pulseonselect>
-					<onup>10005</onup>
-					<ondown>10007</ondown>
-					<onleft>-</onleft>
-					<onright>11201</onright>
 					<label>Calendar</label>
 				</control>
 				<control type="button" id="10007">
 					<description>TV Shows</description>
-					<posx>0</posx>
-					<posy>80</posy>
 					<height>40</height>
 					<width>250</width>
 					<textoffsetx>10</textoffsetx>
@@ -543,17 +779,10 @@
 					<font>font13</font>
 					<texturefocus border="5">button-focus.png</texturefocus>
 					<texturenofocus>-</texturenofocus>
-					<pulseonselect>false</pulseonselect>
-					<onup>10006</onup>
-					<ondown>10008</ondown>
-					<onleft>-</onleft>
-					<onright>11201</onright>
 					<label>TV Shows</label>
 				</control>
 				<control type="button" id="10008">
 					<description>Movies</description>
-					<posx>0</posx>
-					<posy>120</posy>
 					<height>40</height>
 					<width>250</width>
 					<textoffsetx>10</textoffsetx>
@@ -562,24 +791,46 @@
 					<font>font13</font>
 					<texturefocus border="5">button-focus.png</texturefocus>
 					<texturenofocus>-</texturenofocus>
-					<pulseonselect>false</pulseonselect>
-					<onup>10007</onup>
-					<ondown>10021</ondown>
-					<onleft>-</onleft>
-					<onright>11201</onright>
 					<label>Movies</label>
+				</control>
+				<control type="button" id="10009">
+					<description>Recommendations</description>
+					<height>40</height>
+					<width>250</width>
+					<textoffsetx>10</textoffsetx>
+					<textwidth>235</textwidth>
+					<aligny>center</aligny>
+					<font>font13</font>
+					<texturefocus border="5">button-focus.png</texturefocus>
+					<texturenofocus>-</texturenofocus>
+					<label>Recommendations</label>
+				</control>
+				<control type="button" id="10010">
+					<description>My Profile</description>
+					<height>40</height>
+					<width>250</width>
+					<textoffsetx>10</textoffsetx>
+					<textwidth>235</textwidth>
+					<aligny>center</aligny>
+					<font>font13</font>
+					<texturefocus border="5">button-focus.png</texturefocus>
+					<texturenofocus>-</texturenofocus>
+					<label>My Profile</label>
 				</control>
 			</control>
 
-			<control type="group" id="10020">
+			<control type="grouplist" id="10020">
 				<posx>0</posx>
 				<posy>600</posy>
 				<width>250</width>
 				<itemgap>0</itemgap>
+				<orientation>vertical</orientation>
+				<onup>10004</onup>
+				<ondown>-</ondown>
+				<onleft>-</onleft>
+				<onright>-</onright>
 				<control type="button" id="10021">
 					<description>Synchronize</description>
-					<posx>0</posx>
-					<posy>0</posy>
 					<height>40</height>
 					<width>250</width>
 					<textoffsetx>10</textoffsetx>
@@ -588,17 +839,10 @@
 					<font>font13</font>
 					<texturefocus border="5">button-focus.png</texturefocus>
 					<texturenofocus>-</texturenofocus>
-					<pulseonselect>false</pulseonselect>
-					<onup>10008</onup>
-					<ondown>10022</ondown>
-					<onleft>-</onleft>
-					<onright>11201</onright>
 					<label>Synchronize</label>
 				</control>
 				<control type="button" id="10022">
 					<description>Settings</description>
-					<posx>0</posx>
-					<posy>40</posy>
 					<height>40</height>
 					<width>250</width>
 					<textoffsetx>10</textoffsetx>
@@ -607,11 +851,6 @@
 					<font>font13</font>
 					<texturefocus border="5">button-focus.png</texturefocus>
 					<texturenofocus>-</texturenofocus>
-					<pulseonselect>false</pulseonselect>
-					<onup>10021</onup>
-					<ondown>-</ondown>
-					<onleft>-</onleft>
-					<onright>11201</onright>
 					<label>Settings</label>
 				</control>
 			</control>

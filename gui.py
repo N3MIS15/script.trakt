@@ -14,7 +14,7 @@ from cache import summary, friends_activities, trending_shows # ONLY FOR TESTING
 __addon__        = xbmcaddon.Addon(id='script.trakt')
 __addonpath__    = __addon__.getAddonInfo('path')
 
-media_page_settings = ["Trending", "Popular", "Watched", "Played"]
+media_page_settings = ["Trending", "Popular", "Watched", "Played", "Recommended"]
 
 def small_poster(image):
 	if not 'poster-small' in image:
@@ -53,19 +53,29 @@ class traktGUI(xbmcgui.WindowXML):
 			pass # MORE TO COME
 
 		for x in result:
+			rating_key = "rating" if self.rating_type == "simple" else "rating_advanced"
+			rating_badge = "badge-%s.png" % str(x[rating_key]) if x[rating_key] else ""
+			in_watchlist = "true" if x['in_watchlist'] else "false"
+			watched = "true" if x['watched'] else "false"
+
 			if list_type == "trending":
 				label =	 x['title']
 				label2 = "%i watchers" % x['watchers']
 				thumbnail = x['images']['poster']
 				total_watching += x['watchers']
+
 			else:
 				label = ""
 				label2 = ""
 				thumbnail = ""
 
-			li = xbmcgui.ListItem(label=label, label2=label2, thumbnailImage=thumbnail)
+			li = xbmcgui.ListItem(label=label, label2=label2, thumbnailImage=thumbnail, iconImage=rating_badge)
 			li.setProperty("media_type", media_type)
 			li.setProperty("media_id", str(self.getMediaID(x)))
+			li.setProperty("rating", str(x[rating_key]))
+			li.setProperty("rating_image", rating_badge)
+			li.setProperty("watched", watched)
+			li.setProperty("in_watchlist", in_watchlist)
 			list_media.append(li)
 
 		if list_type == "trending":
@@ -105,12 +115,19 @@ class traktGUI(xbmcgui.WindowXML):
 		self.showLoading()
 		if media_type.endswith("s"):
 			media_type = media_type[:-1]
-		summary = api.getSummary(media_type, media_id)
+
+		params = {"type": media_type, "data": media_id}
+		if media_type == "show":
+			params['extended'] = True
+
+		summary = api.getSummary(**params)
+		comments = api.getComments(media_type, media_id, "all")
 		gui = SummaryDialog(
 			"SummaryDialog.xml",
 			__addonpath__,
 			media_type=media_type,
 			media=summary,
+			comments=comments
 		)
 		self.hideLoading(dialog=True)
 		gui.doModal()
@@ -228,9 +245,10 @@ class traktGUI(xbmcgui.WindowXML):
 
 
 class SummaryDialog(xbmcgui.WindowXMLDialog):
-	def __init__(self, xmlFile, resourcePath, forceFallback=False, media_type=None, media=None):
+	def __init__(self, xmlFile, resourcePath, forceFallback=False, media_type=None, media=None, comments=None):
 		self.media_type = media_type
 		self.media = media
+		self.comments = comments
 
 	def onInit(self):
 		title = "%s [COLOR=blue]-[/COLOR] %s" % (self.media_type.title(), self.media['title'])
@@ -239,27 +257,80 @@ class SummaryDialog(xbmcgui.WindowXMLDialog):
 		rating_percent = "%i%%" % self.media['ratings']['percentage']
 		rating_votes = "%i votes" % self.media['ratings']['votes'] # HARDCODED
 		overview = self.media['overview']
-		watchlist = "badge-watchlist.png" if self.media['in_watchlist'] == True else ""
+		watchlist = "badge-watchlist.png" if self.media['in_watchlist'] else ""
 		rating_type = api.settings['viewing']['ratings']['mode']
 		rating = self.media['rating'] if rating_type == "simple" else self.media['rating_advanced']
 
-		info_list = [
-			xbmcgui.ListItem(label="Airs", label2='%s %s' % (self.media['air_day'], self.media['air_time'])), # HARDCODED
-			xbmcgui.ListItem(label="First Aired", label2=str(datetime.datetime.fromtimestamp(int(self.media['first_aired'])).strftime('%B %d, %Y'))), # HARDCODED
-			xbmcgui.ListItem(label="Genre", label2=' / '.join(self.media['genres'])), # HARDCODED
-			xbmcgui.ListItem(label="Runtime", label2=str(self.media['runtime']) + "m"), # HARDCODED
-			xbmcgui.ListItem(label="Certification", label2=str(self.media['certification'])), # HARDCODED
+		if self.media_type == "show":
+			show_total_episodes = 0
+			show_watched_episodes = 0
+			season_list = []
+
+			for season in self.media['seasons']:
+				total_episodes = len(season['episodes'])
+				show_total_episodes += total_episodes
+
+				watched_episodes = len([x for x in season['episodes'] if x['watched']])
+				show_watched_episodes += watched_episodes
+
+				li = xbmcgui.ListItem(label="Season %i"%season['season'], thumbnailImage=small_poster(season['images']['poster'])) # HARDCODED
+				li.setProperty("watched", "true" if total_episodes == watched_episodes else "false")
+				season_list.append(li)
+
+			watched = show_total_episodes == show_watched_episodes
+
+			info_list = [
+				xbmcgui.ListItem(label="Airs", label2="%s %s" % (self.media['air_day'], self.media['air_time'])), # HARDCODED
+				xbmcgui.ListItem(label="Premiered", label2=str(datetime.datetime.fromtimestamp(int(self.media['first_aired'])).strftime('%B %d, %Y'))), # HARDCODED
+				xbmcgui.ListItem(label="Certification", label2=str(self.media['certification'])), # HARDCODED
+				xbmcgui.ListItem(label="Runtime", label2=str(self.media['runtime']) + "m"), # HARDCODED
+				xbmcgui.ListItem(label="Genres", label2=" / ".join(self.media['genres'])), # HARDCODED
+			]
+
+			season_list = [xbmcgui.ListItem(label="Season %i"%x['season'], thumbnailImage=small_poster(x['images']['poster'])) for x in self.media['seasons']] #HARDCODED
+			self.getControl(12100).addItems(season_list)
+
+		elif self.media_type == "movie":
+			watched = self.media['watched']
+			info_list = [
+				xbmcgui.ListItem(label="Runtime", label2=str(self.media['runtime']) + "m"), # HARDCODED
+				xbmcgui.ListItem(label="Released", label2=str(datetime.datetime.fromtimestamp(int(self.media['released'])).strftime('%B %d, %Y'))), # HARDCODED
+				xbmcgui.ListItem(label="Certification", label2=str(self.media['certification'])), # HARDCODED
+			]
+
+		stats_list = [
+			xbmcgui.ListItem(label="Watchers", label2=str(self.media['stats']['watchers'])), # HARDCODED
+			xbmcgui.ListItem(label="Plays", label2=str(self.media['stats']['plays'])), # HARDCODED
+			xbmcgui.ListItem(label="Scrobbles", label2=str(self.media['stats']['scrobbles'])), # HARDCODED
+			xbmcgui.ListItem(label="Checkins", label2=str(self.media['stats']['checkins'])), # HARDCODED
+			xbmcgui.ListItem(label="Collection", label2=str(self.media['stats']['collection'])), # HARDCODED
 		]
+
+		comment_list = []
+		for comment in self.comments:
+			li = xbmcgui.ListItem(label=comment['user']['username'], label2=comment['text'], thumbnailImage=comment['user']['avatar'])
+			li.setProperty("type", comment['type'])
+			li.setProperty("spoiler", "true" if comment['spoiler'] else "false")
+			comment_list.append(li)
+
 		self.getControl(12000).setImage(fanart)
 		self.getControl(12001).setLabel(title)
 		self.getControl(12002).setImage(poster)
-		if rating:
-			self.getControl(12003).setImage("badge-%s.png" % rating)
+		self.getControl(12003).setImage("badge-%s.png" % rating if rating else "")
 		self.getControl(12004).setImage(watchlist)
+		self.getControl(12005).setImage("badge-seen.png" if watched else "")
 		self.getControl(12007).setText(overview)
 		self.getControl(12008).setLabel(rating_percent)
 		self.getControl(12009).setLabel(rating_votes)
 		self.getControl(12010).addItems(info_list)
+		self.getControl(12011).addItems(stats_list)
+		self.getControl(12200).addItems(comment_list)
+
+
+	def onClick(self, controlID):
+		Debug("[GUI][Summary] control pressed: %i" % controlID)
+		if controlID == 12200:
+			self.getControl(12200).getSelectedItem().setProperty("spoiler", "false")
 
 
 if __name__ == '__main__':

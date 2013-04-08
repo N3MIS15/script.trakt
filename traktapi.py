@@ -443,9 +443,11 @@ class traktAPI(object):
 
 	# url: http://api.trakt.tv/<show/episode|movie>/summary.format/apikey/title[/season/episode]
 	# returns: returns information for a movie or episode
-	def getSummary(self, type, data):
+	def getSummary(self, type, data, extended=False):
 		if self.testAccount():
 			url = "%s/%s/summary.json/%s/%s" % (self.__baseURL, type, self.__apikey, data)
+			if extended:
+				url += "/extended"
 			Debug("[traktAPI] getSummary(url: %s)" % url)
 			return self.traktRequest('POST', url)
 
@@ -482,3 +484,10 @@ class traktAPI(object):
 			url = "%s/activity/%s.json/%s/%s/%s" % (self.__baseURL, who, self.__apikey, types, actions)
 			Debug("[traktAPI] getActivity(url: %s)" % (url))
 			return self.traktRequest('POST', url, passVersions=True)
+
+	# url: http://api.trakt.tv/media_type/comments.format/apikey/title/type
+	def getComments(self, media_type, media_id, type):
+		if self.testAccount():
+			url = "%s/%s/comments.json/%s/%s/%s" % (self.__baseURL, media_type, self.__apikey, media_id, type)
+			Debug("[traktAPI] getComments(url: %s)" % url)
+			return self.traktRequest('POST', url)
