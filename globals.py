@@ -2,3 +2,4 @@
 #
 
 traktapi = None
+show_cache = None

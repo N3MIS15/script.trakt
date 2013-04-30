@@ -206,6 +206,8 @@ class traktAPI(object):
 			if 'status' in data:
 				if data['status'] == 'success':
 					break
+				elif data['status'] in ['Continuing', 'Ended']: # Summary status
+					break
 				elif returnOnFailure and data['status'] == 'failure':
 					Debug("[traktAPI] traktRequest(): Return on error set, breaking retry.")
 					break
@@ -441,9 +443,11 @@ class traktAPI(object):
 
 	# url: http://api.trakt.tv/<show/episode|movie>/summary.format/apikey/title[/season/episode]
 	# returns: returns information for a movie or episode
-	def getSummary(self, type, data):
+	def getSummary(self, type, data, extended=False):
 		if self.testAccount():
 			url = "%s/%s/summary.json/%s/%s" % (self.__baseURL, type, self.__apikey, data)
+			if extended:
+				url += "/extended"
 			Debug("[traktAPI] getSummary(url: %s)" % url)
 			return self.traktRequest('POST', url)
 
@@ -466,3 +470,84 @@ class traktAPI(object):
 		return self.rate('episode', data)
 	def rateMovie(self, data):
 		return self.rate('movie', data)
+
+	# url: http://api.trakt.tv/<shows|movies>/trending.format/apikey
+	def getTrending(self, media_type):
+		if self.testAccount():
+			url = "%s/%s/trending.json/%s" % (self.__baseURL, media_type, self.__apikey)
+			Debug("[traktAPI] getTrending(url: %s)" % (url))
+			return self.traktRequest('POST', url, passVersions=True)
+
+	# url: http://api.trakt.tv/activity/<friends|community>.format/apikey/types/actions
+	def getActivity(self, who, types, actions):
+		if self.testAccount():
+			url = "%s/activity/%s.json/%s/%s/%s" % (self.__baseURL, who, self.__apikey, types, actions)
+			Debug("[traktAPI] getActivity(url: %s)" % (url))
+			return self.traktRequest('POST', url, passVersions=True)
+
+	# url: http://api.trakt.tv/activity/<friends|community>.format/apikey/types/actions
+	def getRecommendations(self, media_type):
+		if self.testAccount():
+			url = "%s/recommendations/%s/%s" % (self.__baseURL, media_type, self.__apikey)
+			Debug("[traktAPI] getRecommendations(url: %s)" % (url))
+			return self.traktRequest('POST', url, passVersions=True)
+
+	# url: http://api.trakt.tv/media_type/comments.format/apikey/title/type
+	def getComments(self, media_type, media_id, type):
+		if self.testAccount():
+			url = "%s/%s/comments.json/%s/%s/%s" % (self.__baseURL, media_type, self.__apikey, media_id, type)
+			Debug("[traktAPI] getComments(url: %s)" % url)
+			return self.traktRequest('POST', url)
+
+	# url: http://api.trakt.tv/user/network/<friends|followers|following>.format/apikey/username
+	def getNetwork(self, user, network_type):
+		if self.testAccount():
+			url = "%s/user/network/%s.json/%s/%s" % (self.__baseURL, network_type, self.__apikey, user)
+			Debug("[traktAPI] getNetwork(url: %s)" % url)
+			return self.traktRequest('POST', url)
+
+	# url: http://api.trakt.tv/calendar/<shows|premieres>.format/apikey/date/days
+	# url: http://api.trakt.tv/user/calendar/shows.format/apikey/username/date/days
+	def getCalendar(self, calendar_type, date):
+		if self.testAccount():
+			if calendar_type == "my_shows":
+				url = "%s/user/calendar/shows.json/%s/%s/%s/%i" % (self.__baseURL, self.__apikey, self.__username, date, 7)
+			else:
+				url = "%s/calendar/%s.json/%s/%s/%i" % (self.__baseURL, calendar_type, self.__apikey, date, 7)
+			Debug("[traktAPI] getCalendar(url: %s)" % url)
+			return self.traktRequest('POST', url)
+
+	# url: http://api.trakt.tv/user/lists.format/apikey/username
+	def getLists(self, username):
+		if self.testAccount():
+			url = "%s/user/lists.json/%s/%s" % (self.__baseURL, self.__apikey, username)
+			Debug("[traktAPI] getLists(url: %s)" % url)
+			return self.traktRequest('POST', url)
+
+	# url: http://api.trakt.tv/user/list.format/apikey/username/slug
+	def getUserList(self, username, slug):
+		if self.testAccount():
+			url = "%s/user/list.json/%s/%s/%s" % (self.__baseURL, self.__apikey, username, slug)
+			Debug("[traktAPI] getUserList(url: %s)" % url)
+			return self.traktRequest('POST', url)
+
+	# url: http://api.trakt.tv/lists/items/add/apikey
+	def addToList(self, data):
+		if self.testAccount():
+			url = "%s/lists/items/add/%s" % (self.__baseURL, self.__apikey)
+			Debug("[traktAPI] addToList(url: %s)" % url)
+			return self.traktRequest('POST', url, data)
+
+	# url: http://api.trakt.tv/user/watchlist/shows.format/apikey/username
+	def getWatchlist(self, username, media_type):
+		if self.testAccount():
+			url = "%s/user/watchlist/%s.json/%s/%s" % (self.__baseURL, media_type, self.__apikey, username)
+			Debug("[traktAPI] getWatchlist(url: %s)" % url)
+			return self.traktRequest('POST', url)
+
+	# url: http://api.trakt.tv/search/<shows|episodes|movies|people|users>.format/apikey/query
+	def getSearchResults(self, search_type, query):
+		if self.testAccount():
+			url = "%s/search/%s.json/%s/%s" % (self.__baseURL, search_type, self.__apikey, query)
+			Debug("[traktAPI] getSearchResults(url: %s)" % url)
+			return self.traktRequest('POST', url)
