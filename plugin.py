@@ -89,17 +89,25 @@ def base_media_li(media, media_type):
         else:
             li['path'] = plugin.url_for("index")
 
+        if media_type != "episode":
+            context_summary = ("Summary", "XBMC.RunPlugin(%s)" % plugin.url_for("summary", media_type=media_type, media_id=media_id))
+            context_rate = ("Rate", "RunScript(script.trakt,action=rate,media_type=%s,remoteid=%s)" % (media_type, media_id))
+            context_add_to_list = ("Add to list", "XBMC.RunPlugin(%s)" % plugin.url_for("add_to_list", media_type=media_type, media_id=media_id))
+
+        else:
+            context_summary = ("Summary", "XBMC.Notification(%s,%s,%i,%s)" % ("Add Me", "Episode Summary", 5000, icon))
+            context_rate = ("Rate", "RunScript(script.trakt,action=rate,media_type=%s,remoteid=%s,season=%i,episode=%i)" % (media_type, media_id, season, episode))
+            context_add_to_list = ("Add to list", "XBMC.RunPlugin(%s)" % plugin.url_for("add_episode_to_list", media_type=media_type, media_id=media_id, season=season, episode=episode))
+
         li['context_menu'] = [
-            ("Summary", "XBMC.RunPlugin(%s)" % plugin.url_for("summary", media_type=media_type, media_id=media_id)),
-            ("Rate", "XBMC.Notification(%s,%s,%i,%s)" % ("Add Me", "Rate", 5000, icon)),
-            ("Mark as Seen", "XBMC.Notification(%s,%s,%i,%s)" % ("Add Me", "Mark as seen", 5000, icon)),
-            ("Add to list", "XBMC.RunPlugin(%s)" % plugin.url_for("add_to_list", media_type=media_type, media_id=media_id))
+            context_summary,
+            context_rate,
+            context_add_to_list
         ]
     else:
         li['path'] = plugin.url_for("index")
         li['context_menu'] = [
-            ("Mark as Seen", "XBMC.Notification(%s,%s,%i,%s)" % ("Add Me", "Mark as seen", 5000, icon)),
-            ("Add to list", "XBMC.Notification(%s,%s,%i,%s)" % ("Add Me", "Add to list", 5000, icon))
+            ("Add to list", "XBMC.RunPlugin(%s)" % plugin.url_for("add_season_to_list", media_type=media_type, media_id=media_id, season=season))
         ]
     return li
 
@@ -311,21 +319,20 @@ def sync():
     return
 
 
-@plugin.route("/add_to_list/<media_type>/<media_id>")
-def add_to_list(media_type, media_id):
+@plugin.route("/add_to_list/<media_type>/<media_id>/")
+def add_to_list(media_type, media_id, season=None, episode=None):
     show_busy()
     username = utils.getSetting('username').strip()
-
-    if media_id.startswith("tt"):
-        id_type = "imdb_id"
-    elif media_type == "shows" and str(media_id).isdigit():
-        id_type = "tvdb_id"
-    else:
-        id_type = "tmdb_id"
 
     if media_type.endswith("s"):
         media_type = media_type[:-1]
 
+    if media_id.startswith("tt"):
+        id_type = "imdb_id"
+    elif media_type in ["show", "episode", "season"] and str(media_id).isdigit():
+        id_type = "tvdb_id"
+    else:
+        id_type = "tmdb_id"
 
     lists = ["Watchlist"]
     user_lists = api.getLists(username)
@@ -353,6 +360,11 @@ def add_to_list(media_type, media_id):
                 ]
             }
 
+            if season:
+                data['items'][0]['season'] = int(season)
+            if episode:
+                data['items'][0]['episode'] = int(episode)
+
             result = api.addToList(data)
             hide_busy()
             if not result['skipped_items']:
@@ -362,6 +374,15 @@ def add_to_list(media_type, media_id):
                 # show failed dialog
                 pass
     
+
+@plugin.route("/add_season_to_list/<media_type>/<media_id>/<season>/")
+def add_season_to_list(media_type, media_id, season=None):
+    add_to_list(media_type, media_id, season)
+
+
+@plugin.route("/add_episode_to_list/<media_type>/<media_id>/<season>/<episode>/")
+def add_episode_to_list(media_type, media_id, season=None, episode=None):
+    add_to_list(media_type, media_id, season, episode)
 
 
 
