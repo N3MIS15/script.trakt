@@ -67,6 +67,15 @@ def isMovie(type):
 def isEpisode(type):
 	return type == 'episode'
 
+def isShow(type):
+	return type == 'show'
+
+def isSeason(type):
+	return type == 'season'
+
+def isValidMediaType(type):
+	return type in ['movie', 'show', 'episode']
+
 def xbmcJsonRequest(params):
 	data = json.dumps(params)
 	request = xbmc.executeJSONRPC(data)
@@ -106,24 +115,61 @@ def checkScrobblingExclusion(fullpath):
 		return True
 		
 	ExcludePath = getSetting('ExcludePath')
-	if not ExcludePath and getSettingAsBool('ExcludePathOption'):
+	if ExcludePath != "" and getSettingAsBool('ExcludePathOption'):
 		if (fullpath.find(ExcludePath) > -1):
 			Debug("checkScrobblingExclusion(): Video is playing from location, which is currently set as excluded path 1.")
 			return True
 
 	ExcludePath2 = getSetting('ExcludePath2')
-	if not ExcludePath2 and getSettingAsBool('ExcludePathOption2'):
+	if ExcludePath2 != "" and getSettingAsBool('ExcludePathOption2'):
 		if (fullpath.find(ExcludePath2) > -1):
 			Debug("checkScrobblingExclusion(): Video is playing from location, which is currently set as excluded path 2.")
 			return True
 
 	ExcludePath3 = getSetting('ExcludePath3')
-	if not ExcludePath3 and getSettingAsBool('ExcludePathOption3'):
+	if ExcludePath3 != "" and getSettingAsBool('ExcludePathOption3'):
 		if (fullpath.find(ExcludePath3) > -1):
 			Debug("checkScrobblingExclusion(): Video is playing from location, which is currently set as excluded path 3.")
 			return True
 	
 	return False
+
+def getFormattedType(type):
+	if isMovie(type):
+		return getString(1205)
+	elif isShow(type):
+		return getString(1206)
+	elif isSeason(type):
+		return getString(1207)
+	elif isEpisode(type):
+		return getString(1208)
+
+def getFormattedItemName(type, info, short=False):
+	s = None
+	if isShow(type):
+		s = info['title']
+	elif isEpisode(type):
+		if short:
+			s = "S%02dE%02d - %s" % (info['episode']['season'], info['episode']['number'], info['episode']['title'])
+		else:
+			s = "%s - S%02dE%02d - %s" % (info['show']['title'], info['episode']['season'], info['episode']['number'], info['episode']['title'])
+	elif isMovie(type):
+		s = "%s (%s)" % (info['title'], info['year'])
+	return s
+
+def getShowDetailsFromXBMC(showID, fields):
+	result = xbmcJsonRequest({'jsonrpc': '2.0', 'method': 'VideoLibrary.GetTVShowDetails', 'params':{'tvshowid': showID, 'properties': ['year', 'imdbnumber']}, 'id': 1})
+	Debug("getShowDetailsFromXBMC(): %s" % str(result))
+
+	if not result:
+		Debug("getEpisodeDetailsFromXbmc(): Result from XBMC was empty.")
+		return None
+
+	try:
+		return result['tvshowdetails']
+	except KeyError:
+		Debug("getShowDetailsFromXBMC(): KeyError: result['tvshowdetails']")
+		return None
 
 # get a single episode from xbmc given the id
 def getEpisodeDetailsFromXbmc(libraryId, fields):
@@ -134,15 +180,16 @@ def getEpisodeDetailsFromXbmc(libraryId, fields):
 		Debug("getEpisodeDetailsFromXbmc(): Result from XBMC was empty.")
 		return None
 
+	show_data = getShowDetailsFromXBMC(result['episodedetails']['tvshowid'], ['year', 'imdbnumber'])
+	
+	if not show_data:
+		Debug("getEpisodeDetailsFromXbmc(): Result from getShowDetailsFromXBMC() was empty.")
+		return None
+		
+	result['episodedetails']['tvdb_id'] = show_data['imdbnumber']
+	result['episodedetails']['year'] = show_data['year']
+	
 	try:
-		# get tvdb id
-		result_show = xbmcJsonRequest({'jsonrpc': '2.0', 'method': 'VideoLibrary.GetTVShowDetails', 'params':{'tvshowid': result['episodedetails']['tvshowid'], 'properties': ['year', 'imdbnumber']}, 'id': 1})
-		Debug("getEpisodeDetailsFromXbmc(): %s" % str(result_show))
-
-		# add to episode data
-		result['episodedetails']['tvdb_id'] = result_show['tvshowdetails']['imdbnumber']
-		result['episodedetails']['year'] = result_show['tvshowdetails']['year']
-
 		return result['episodedetails']
 	except KeyError:
 		Debug("getEpisodeDetailsFromXbmc(): KeyError: result['episodedetails']")

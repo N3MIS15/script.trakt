@@ -18,6 +18,7 @@
 	<string id="1041">Scrobble de Películas</string>
 	<string id="1042">Scrobble de Series</string>
 	<string id="1043">Porcentaje mínimo antes de hacer scrobble</string>
+	<string id="1044">Simular scrobbling (para hacer pruebas)</string>
 	
 	<string id="1050">Exclusiones</string>
 	<string id="1051">Excluir TV en vivo</string>
@@ -31,7 +32,7 @@
 	<string id="1108">Imposible connectarse a Trakt</string>
 	<string id="1109">Error</string>
 	<string id="1110">Imposible connectarse a Trakt</string>
-	<string id="1167">Valoración enviada correctamente</string>
+	<string id="1167">Valoración para '%s' se ha enviada correctamente</string>
 	<string id="1313">¿Qué te pareció?</string>
 	<string id="1314">Totally Ninja!</string>
 	<string id="1315">Weak Sauce :(</string>
@@ -62,6 +63,7 @@
 	<string id="1412">Mostrar notificaciones</string>
 	<string id="1413">Limpiar colección de Películas en Trakt</string>
 	<string id="1414">Limpiar colección de Episodios en Trakt</string>
+	<string id="1415">Simular sincronización (para hacer pruebas)</string>
 
 	<!-- Sync Notifications -->
 	<string id="1420">Sincronización iniciada</string>
