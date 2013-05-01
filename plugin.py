@@ -38,6 +38,15 @@ def get_media_id(media):
     else:
         return None
 
+def get_media_id_type(media_id, media_type):
+    if media_id.startswith("tt"):
+        id_type = "imdb_id"
+    elif media_type in ["show", "episode", "season"] and str(media_id).isdigit():
+        id_type = "tvdb_id"
+    else:
+        id_type = "tmdb_id"
+    return media_type
+
 
 def small_poster(image):
     if not 'poster-small' in image:
@@ -272,6 +281,7 @@ def get_watchlist(username, media_type):
     watchlist = api.getWatchlist(username, media_type)
     return [base_media_li(x, media_type) for x in watchlist]
 
+
 @plugin.route("/search/")
 def search():
     search_in_list = ["Shows", "Episodes", "Movies", "Users"]
@@ -323,16 +333,10 @@ def sync():
 def add_to_list(media_type, media_id, season=None, episode=None):
     show_busy()
     username = utils.getSetting('username').strip()
+    id_type = get_media_id_type(media_id, media_type)
 
     if media_type.endswith("s"):
         media_type = media_type[:-1]
-
-    if media_id.startswith("tt"):
-        id_type = "imdb_id"
-    elif media_type in ["show", "episode", "season"] and str(media_id).isdigit():
-        id_type = "tvdb_id"
-    else:
-        id_type = "tmdb_id"
 
     lists = ["Watchlist"]
     user_lists = api.getLists(username)
