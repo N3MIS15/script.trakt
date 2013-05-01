@@ -126,7 +126,6 @@ def index():
     return [
         {"label": "Trending", "icon": icon, "path": plugin.url_for("trending_sub", media_type="shows")},
         {"label": "Calendar", "icon": icon, "path": plugin.url_for("calendar_sub")},
-        {"label": "Charts", "icon": icon, "path": plugin.url_for("index")},
         {"label": "Network", "icon": icon, "path": plugin.url_for("network_sub")},
         {"label": "Recommendations", "icon": icon, "path": plugin.url_for("recommendations_sub")},
         {"label": "Activity", "icon": icon, "path": plugin.url_for("activities_sub")},
